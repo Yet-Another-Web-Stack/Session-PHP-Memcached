@@ -1,0 +1,29 @@
+{
+    "name": "idrinth/php-memcached-session",
+    "description": "Provides a sessionhandler for php and memcached",
+    "license": "MIT",
+    "type": "library",
+    "keywords": ["session", "php", "memcached"],
+    "homepage": "https://github.com/Idrinth/PhpMemcachedSession",
+    "authors": [
+        {
+            "name": "Björn Büttner",
+            "email": "Idrinth@users.noreply.github.com",
+            "homepage": "http://idrinth.de",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Idrinth\\PhpMemcachedSession\\": ""
+        }
+    },
+    "support": {
+        "issues": "https://github.com/Idrinth/PhpMemcachedSession/issues",
+        "source": "https://github.com/Idrinth/PhpMemcachedSession"
+    },
+    "require": {
+        "php": "^5.6.0",
+        "ext-memcached": "*"
+    }
+}
