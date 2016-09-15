@@ -46,6 +46,10 @@ class MemCache {
      * @return string
      */
     public function getByKey(array $params) {
+        while($this->memcache->get($this->getKey($params) . '.locked')) {
+            usleep(mt_rand(100,1000));
+        }
+        $this->memcache->set($this->getKey($params) . '.locked','1');
         $value = $this->memcache->get($this->getKey($params));
         if($value) {
             $this->memcache->touch($this->getKey($params),time() + $this->duration);
@@ -59,6 +63,7 @@ class MemCache {
      * @return boolean
      */
     public function setByKey(array $params,$value) {
+        $this->memcache->delete($this->getKey($params) . '.locked');
         return $this->memcache->set($this->getKey($params),$value,time() + $this->duration);
     }
     /**
@@ -67,6 +72,7 @@ class MemCache {
      * @return boolean
      */
     public function removeByKey(array $params) {
-        return $this->memcache->set($this->getKey($params),'',1);
+        $this->memcache->delete($this->getKey($params) . '.locked');
+        return $this->memcache->delete($this->getKey($params));
     }
 }

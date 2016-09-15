@@ -38,6 +38,12 @@ class Session {
         $this->repository = new \Idrinth\PhpMemcachedSession\Repository\MemCache();
     }
     /**
+     * 
+     */
+    protected function __destruct() {
+        $this->save(serialize($_SESSION));
+    }
+    /**
      *
      * @return string a serialized string
      */
