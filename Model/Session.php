@@ -25,6 +25,11 @@ class Session {
     protected $id;
     /**
      *
+     * @var string
+     */
+    protected $ipPart;
+    /**
+     *
      * @var \Idrinth\PhpMemcachedSession\Model\Session
      */
     protected static $instance;
@@ -35,10 +40,18 @@ class Session {
     protected function __construct($id) {
         $this->id = $id;
         $this->agent = $this->getUserAgent();
+        $this->ipPart = explode(strpos($_SERVER['REMOTE_ADDR'],'.')?'.':':',$_SERVER['REMOTE_ADDR'])[0];
         $this->repository = new \Idrinth\PhpMemcachedSession\Repository\MemCache();
     }
     /**
-     * 
+     *
+     * @return string[]
+     */
+    protected function getKeys() {
+        return [$this->agent,$this->ipPart,$this->id];
+    }
+    /**
+     * stores the session
      */
     protected function __destruct() {
         $this->save(serialize($_SESSION));
@@ -48,7 +61,7 @@ class Session {
      * @return string a serialized string
      */
     public function load() {
-        $this->original = $this->getByKey([$this->agent,$this->id]) . '';
+        $this->original = $this->getByKey($this->getKeys()) . '';
         return $this->original;
     }
     /**
@@ -60,13 +73,13 @@ class Session {
         if($data === $this->original) {
             return true;//nothing to change
         }
-        return $this->repository->updateByKey([$this->agent,$this->id],$data);
+        return $this->repository->updateByKey($this->getKeys(),$data);
     }
     /**
      * deletes the current data and instance
      */
     public function delete() {
-        $this->repository->removeByKey([$this->agent,$this->id]);
+        $this->repository->removeByKey($this->getKeys());
         self::$instance = null;
     }
     /**
