@@ -4,26 +4,26 @@
     "license": "MIT",
     "type": "library",
     "keywords": ["session", "php", "memcached"],
-    "homepage": "https://github.com/Idrinth/PhpMemcachedSession",
+    "homepage": "https://github.com/Yet-Another-Web-Stack/Session-PHP-Memcached",
     "authors": [
         {
             "name": "Björn Büttner",
             "email": "Idrinth@users.noreply.github.com",
-            "homepage": "http://idrinth.de",
+            "homepage": "https://github.com/Yet-Another-Web-Stack",
             "role": "Developer"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Idrinth\\PhpMemcachedSession\\": ""
+            "Idrinth\\PhpMemcachedSession\\": "src/"
         }
     },
     "support": {
-        "issues": "https://github.com/Idrinth/PhpMemcachedSession/issues",
-        "source": "https://github.com/Idrinth/PhpMemcachedSession"
+        "issues": "https://github.com/Yet-Another-Web-Stack/Session-PHP-Memcached/issues",
+        "source": "https://github.com/Yet-Another-Web-Stack/Session-PHP-Memcached"
     },
     "require": {
-        "php": "^5.6.0",
+        "php": ">=5.6.0",
         "ext-memcached": "*"
     }
 }
