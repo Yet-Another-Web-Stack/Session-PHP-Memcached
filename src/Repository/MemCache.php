@@ -1,6 +1,6 @@
 <?php
 
-namespace Idrinth\PhpMemcachedSession\Repository;
+namespace YetAnotherWebStack\PhpMemcachedSession\Repository;
 
 class MemCache {
 
@@ -14,7 +14,7 @@ class MemCache {
      *
      * @var string[]
      */
-    protected $prefix = ['idrinth', 'memcached-session'];
+    protected $prefix = ['yet-another-web-stack', 'memcached-session'];
 
     /**
      *
@@ -23,13 +23,13 @@ class MemCache {
     protected $memcache;
 
     /**
-     * @return \Idrinth\PhpMemcachedSession\Repository\MemCache
+     * @return \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache
      */
     public function __construct() {
         $this->memcache = new \Memcached();
         $this->duration = ini_get("session.gc_maxlifetime");
         if (count($this->memcache->getServerList()) == 0) {
-            $this->memcache->addServer(ini_get('idrinth_session.memcache_server'), ini_get('idrinth_session.memcache_port'));
+            $this->memcache->addServer(ini_get('yetanotherwebstack_session.memcache_server'), ini_get('yetanotherwebstack_session.memcache_port'));
         }
         if (!$this->duration) {
             $this->duration = 3600;

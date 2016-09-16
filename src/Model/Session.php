@@ -1,6 +1,6 @@
 <?php
 
-namespace Idrinth\PhpMemcachedSession\Model;
+namespace YetAnotherWebStack\PhpMemcachedSession\Model;
 
 class Session {
 
@@ -12,7 +12,7 @@ class Session {
 
     /**
      *
-     * @var \Idrinth\PhpMemcachedSession\Repository\MemCache
+     * @var \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache
      */
     protected $repository;
 
@@ -36,7 +36,7 @@ class Session {
 
     /**
      *
-     * @var \Idrinth\PhpMemcachedSession\Model\Session
+     * @var \YetAnotherWebStack\PhpMemcachedSession\Model\Session
      */
     protected static $instance;
 
@@ -48,7 +48,7 @@ class Session {
         $this->sessionId = $sessionId;
         $this->agent = $this->getUserAgent();
         $this->ipPart = explode(strpos($_SERVER['REMOTE_ADDR'], '.') ? '.' : ':', $_SERVER['REMOTE_ADDR'])[0];
-        $this->repository = new \Idrinth\PhpMemcachedSession\Repository\MemCache();
+        $this->repository = new \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache();
     }
 
     /**
@@ -125,7 +125,7 @@ class Session {
     /**
      *
      * @param string $sessionId
-     * @return \Idrinth\PhpMemcachedSession\Model\Session
+     * @return \YetAnotherWebStack\PhpMemcachedSession\Model\Session
      */
     public static function get($sessionId) {
         if (!self::$instance) {

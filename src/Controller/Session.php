@@ -1,6 +1,6 @@
 <?php
 
-namespace Idrinth\PhpMemcachedSession\Controller;
+namespace YetAnotherWebStack\PhpMemcachedSession\Controller;
 
 class Session implements \SessionHandlerInterface {
 
@@ -17,7 +17,7 @@ class Session implements \SessionHandlerInterface {
      * @return string
      */
     public function create_sid() {
-        return sha1(mt_rand() . microtime() . getmypid() . ini_get('idrinth_session.sid_pepper'));
+        return sha1(mt_rand() . microtime() . getmypid() . ini_get('yetanotherwebstack_session.sid_pepper'));
     }
 
     /**
@@ -25,7 +25,7 @@ class Session implements \SessionHandlerInterface {
      * @param string $session_id
      */
     public function destroy($session_id) {
-        return \Idrinth\PhpMemcachedSession\Model\Session::get($session_id)->delete();
+        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->delete();
     }
 
     /**
@@ -54,7 +54,7 @@ class Session implements \SessionHandlerInterface {
      * @return string
      */
     public function read($session_id) {
-        return \Idrinth\PhpMemcachedSession\Model\Session::get($session_id)->load();
+        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->load();
     }
 
     /**
@@ -64,7 +64,7 @@ class Session implements \SessionHandlerInterface {
      * @return boolean
      */
     public function write($session_id, $session_data) {
-        return \Idrinth\PhpMemcachedSession\Model\Session::get($session_id)->save($session_data);
+        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->save($session_data);
     }
 
 }

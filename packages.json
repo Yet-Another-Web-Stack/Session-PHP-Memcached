@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Idrinth\\PhpMemcachedSession\\": "src/"
+            "YetAnotherWebStack\\PhpMemcachedSession\\": "src/"
         }
     },
     "support": {
