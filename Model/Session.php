@@ -22,7 +22,7 @@ class Session {
      *
      * @var string
      */
-    protected $id;
+    protected $sessionId;
     /**
      *
      * @var string
@@ -35,10 +35,10 @@ class Session {
     protected static $instance;
     /**
      *
-     * @param string $id
+     * @param string $sessionId
      */
-    protected function __construct($id) {
-        $this->id = $id;
+    protected function __construct($sessionId) {
+        $this->sessionId = $sessionId;
         $this->agent = $this->getUserAgent();
         $this->ipPart = explode(strpos($_SERVER['REMOTE_ADDR'],'.')?'.':':',$_SERVER['REMOTE_ADDR'])[0];
         $this->repository = new \Idrinth\PhpMemcachedSession\Repository\MemCache();
@@ -48,10 +48,10 @@ class Session {
      * @return string[]
      */
     protected function getKeys() {
-        return [$this->agent,$this->ipPart,$this->id];
+        return [$this->agent,$this->ipPart,$this->sessionId];
     }
     /**
-     * stores the session
+     * stores the sessionId
      */
     protected function __destruct() {
         $this->save(serialize($_SESSION));
@@ -110,12 +110,12 @@ class Session {
     }
     /**
      *
-     * @param string $id
+     * @param string $sessionId
      * @return \Idrinth\PhpMemcachedSession\Model\Session
      */
-    public static function get($id) {
+    public static function get($sessionId) {
         if(!self::$instance) {
-            self::$instance = new self($id);
+            self::$instance = new self($sessionId);
         }
         return self::$instance;
     }
