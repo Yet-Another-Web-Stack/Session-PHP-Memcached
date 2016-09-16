@@ -45,7 +45,8 @@ class MemCache implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Rep
     protected function setMemcacheLogin() {
         if (\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
                         'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getSpecific('memcache_user') && \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                )->getSpecific('memcache_user') &&
+                \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
                         'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
                 )->getSpecific('memcache_password')) {
             $this->memcache->setSaslAuthData(

@@ -12,7 +12,7 @@ class Initializer {
     public static function run(callable $callable,
             $configuration = 'YetAnotherWebStack\PhpMemcachedSession\Service\Configuration'
     ) {
-        DependencyInjector::set(
+        Service\DependencyInjector::set(
                 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration',
                 $configuration, true);
 

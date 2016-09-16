@@ -11,15 +11,15 @@ class DependencyInjector {
     private static $instance;
 
     /**
-     * param string $id
+     * param string $interface
      * @return \stdClass
      */
-    public static function get($id, $arguments) {
+    public static function get($interface, $arguments) {
         if (!self::$instance) {
             self::$instance = new \Auryn\Injector();
         }
-        $object = self::$instance->make($id, $arguments);
-        if (key_exists($id, self::$instance)) {
+        $object = self::$instance->make($interface, $arguments);
+        if (key_exists($interface, self::$instance)) {
             self::$instance->share($object);
         }
         return $object;
