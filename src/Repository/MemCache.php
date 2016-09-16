@@ -2,7 +2,7 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Repository;
 
-class MemCache {
+class MemCache implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository {
 
     /**
      *
@@ -23,13 +23,23 @@ class MemCache {
     protected $memcache;
 
     /**
-     * @return \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache
+     * parma \Memcached $memcache
      */
-    public function __construct() {
-        $this->memcache = new \Memcached();
-        $this->duration = ini_get("session.gc_maxlifetime");
+    public function __construct(\Memcached $memcache) {
+        $this->memcache = $memcache;
+        $this->memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
+        if (\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_user') && \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_password')) {
+            $this->memcache->setSaslAuthData(
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_user'),
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_password')
+            );
+        }
+        $this->duration = DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getGeneral("gc_maxlifetime");
         if (count($this->memcache->getServerList()) == 0) {
-            $this->memcache->addServer(ini_get('yetanotherwebstack_session.memcache_server'), ini_get('yetanotherwebstack_session.memcache_port'));
+            $this->memcache->addServer(
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_server'),
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_port')
+            );
         }
         if (!$this->duration) {
             $this->duration = 3600;
@@ -43,7 +53,9 @@ class MemCache {
      * @return string
      */
     protected function getKey($params = array()) {
-        return trim(implode('.', $this->prefix) . '.' . implode('.', $params), '.');
+        return trim(
+                implode('.', $this->prefix) . '.' . implode('.', $params), '.'
+        );
     }
 
     /**
@@ -58,7 +70,8 @@ class MemCache {
         $this->memcache->set($this->getKey($params) . '.locked', '1');
         $value = $this->memcache->get($this->getKey($params));
         if ($value) {
-            $this->memcache->touch($this->getKey($params), time() + $this->duration);
+            $this->memcache->touch($this->getKey($params),
+                    time() + $this->duration);
         }
         return $value;
     }
@@ -71,7 +84,8 @@ class MemCache {
      */
     public function setByKey(array $params, $value) {
         $this->memcache->delete($this->getKey($params) . '.locked');
-        return $this->memcache->set($this->getKey($params), $value, time() + $this->duration);
+        return $this->memcache->set($this->getKey($params), $value,
+                        time() + $this->duration);
     }
 
     /**

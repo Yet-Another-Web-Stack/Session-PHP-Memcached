@@ -2,7 +2,7 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Controller;
 
-class Session implements \SessionHandlerInterface {
+class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller {
 
     /**
      *
@@ -17,7 +17,10 @@ class Session implements \SessionHandlerInterface {
      * @return string
      */
     public function create_sid() {
-        return sha1(mt_rand() . microtime() . getmypid() . ini_get('yetanotherwebstack_session.sid_pepper'));
+        return sha1(
+                mt_rand() . microtime() . getmypid() .
+                \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('sid_pepper')
+        );
     }
 
     /**
@@ -25,7 +28,9 @@ class Session implements \SessionHandlerInterface {
      * @param string $session_id
      */
     public function destroy($session_id) {
-        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->delete();
+        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
+                        [':sessionId' => $session_id])->delete();
     }
 
     /**
@@ -44,7 +49,6 @@ class Session implements \SessionHandlerInterface {
      * @return boolean
      */
     public function open($save_path, $name) {
-        ini_set('session.serialize_handler', 'php_serialize');
         return true;
     }
 
@@ -54,7 +58,9 @@ class Session implements \SessionHandlerInterface {
      * @return string
      */
     public function read($session_id) {
-        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->load();
+        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
+                        ['sessionId' => $session_id])->load();
     }
 
     /**
@@ -64,7 +70,9 @@ class Session implements \SessionHandlerInterface {
      * @return boolean
      */
     public function write($session_id, $session_data) {
-        return \YetAnotherWebStack\PhpMemcachedSession\Model\Session::get($session_id)->save($session_data);
+        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
+                        ['sessionId' => $session_id])->save($session_data);
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Model;
 
-class Session {
+class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model {
 
     /**
      *
@@ -12,7 +12,7 @@ class Session {
 
     /**
      *
-     * @var \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache
+     * @var \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository
      */
     protected $repository;
 
@@ -36,19 +36,16 @@ class Session {
 
     /**
      *
-     * @var \YetAnotherWebStack\PhpMemcachedSession\Model\Session
-     */
-    protected static $instance;
-
-    /**
-     *
      * @param string $sessionId
+     * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
-    protected function __construct($sessionId) {
+    protected function __construct($sessionId,
+            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository) {
         $this->sessionId = $sessionId;
         $this->agent = $this->getUserAgent();
-        $this->ipPart = explode(strpos($_SERVER['REMOTE_ADDR'], '.') ? '.' : ':', $_SERVER['REMOTE_ADDR'])[0];
-        $this->repository = new \YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache();
+        $this->ipPart = explode(strpos($_SERVER['REMOTE_ADDR'], '.') ? '.' : ':',
+                        $_SERVER['REMOTE_ADDR'])[0];
+        $this->repository = $repository;
     }
 
     /**
@@ -120,18 +117,6 @@ class Session {
             return 'internet explorer';
         }
         return trim(preg_replace('/(\/|\(|[0-9]|V[0-9]).*/i', '', $agent));
-    }
-
-    /**
-     *
-     * @param string $sessionId
-     * @return \YetAnotherWebStack\PhpMemcachedSession\Model\Session
-     */
-    public static function get($sessionId) {
-        if (!self::$instance) {
-            self::$instance = new self($sessionId);
-        }
-        return self::$instance;
     }
 
 }
