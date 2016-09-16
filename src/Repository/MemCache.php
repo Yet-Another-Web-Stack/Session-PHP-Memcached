@@ -28,23 +28,51 @@ class MemCache implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Rep
     public function __construct(\Memcached $memcache) {
         $this->memcache = $memcache;
         $this->memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
-        if (\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_user') && \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_password')) {
-            $this->memcache->setSaslAuthData(
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_user'),
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_password')
-            );
-        }
-        $this->duration = DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getGeneral("gc_maxlifetime");
-        if (count($this->memcache->getServerList()) == 0) {
-            $this->memcache->addServer(
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_server'),
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('memcache_port')
-            );
-        }
+        $this->setMemcacheLogin();
+        $this->initializeServer();
+        $this->duration = DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                )->getGeneral("gc_maxlifetime");
         if (!$this->duration) {
             $this->duration = 3600;
         }
         return $this;
+    }
+
+    /**
+     * add login data if provided
+     */
+    protected function setMemcacheLogin() {
+        if (\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                )->getSpecific('memcache_user') && \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                )->getSpecific('memcache_password')) {
+            $this->memcache->setSaslAuthData(
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                    )->getSpecific('memcache_user'),
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                    )->getSpecific('memcache_password')
+            );
+        }
+    }
+
+    /**
+     * initializes a new server if necessary
+     */
+    protected function initializeServer() {
+        if (count($this->memcache->getServerList()) == 0) {
+            $this->memcache->addServer(
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                    )->getSpecific('memcache_server'),
+                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                    )->getSpecific('memcache_port')
+            );
+        }
     }
 
     /**

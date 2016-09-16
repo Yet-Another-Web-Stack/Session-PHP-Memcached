@@ -19,7 +19,9 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Contr
     public function create_sid() {
         return sha1(
                 mt_rand() . microtime() . getmypid() .
-                \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->getSpecific('sid_pepper')
+                \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                )->getSpecific('sid_pepper')
         );
     }
 

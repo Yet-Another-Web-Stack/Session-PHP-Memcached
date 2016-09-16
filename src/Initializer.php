@@ -12,29 +12,52 @@ class Initializer {
     public static function run(callable $callable,
             $configuration = 'YetAnotherWebStack\PhpMemcachedSession\Service\Configuration'
     ) {
-        DependencyInjector::set('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration',
+        DependencyInjector::set(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration',
                 $configuration, true);
 
-        DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->setGeneral('serialize_handler',
-                'php_serialize'); //more useful - could be used outside php
-        DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->setGeneral('name',
-                'session'); //not obviously php
-        DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->setGeneral('use_cookies',
-                1);
-        DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration')->setGeneral('use_only_cookies',
-                1);
+        self::setSettings();
+        self::setClasses();
+        call_user_func($callable);
+        session_set_save_handler(
+                Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller'
+                )
+        );
+    }
 
-        DependencyInjector::set('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository',
+    /**
+     * sets the class name lookup
+     */
+    protected static function setClasses() {
+        Service\DependencyInjector::set(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository',
                 'YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache');
-        DependencyInjector::set('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
+        Service\DependencyInjector::set(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
                 'YetAnotherWebStack\PhpMemcachedSession\Model\Session', true);
-        DependencyInjector::set('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller',
+        Service\DependencyInjector::set(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller',
                 'YetAnotherWebStack\PhpMemcachedSession\Controller\Session',
                 true);
+    }
 
-
-        call_user_func($callable);
-        session_set_save_handler(DependencyInjector::get('YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller'));
+    /**
+     * sets the generally expected settings for the session. files
+     */
+    protected static function setSettings() {
+        Service\DependencyInjector::get(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+        )->setGeneral('serialize_handler', 'php_serialize');
+        Service\DependencyInjector::get(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+        )->setGeneral('name', 'name');
+        Service\DependencyInjector::get(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+        )->setGeneral('use_cookies', 1);
+        Service\DependencyInjector::get(
+                'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+        )->setGeneral('use_only_cookies', 1);
     }
 
 }
