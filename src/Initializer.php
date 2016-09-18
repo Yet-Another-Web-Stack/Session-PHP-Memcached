@@ -8,16 +8,18 @@ class Initializer {
      * initialises defaults, calls the callable and then sets the handler
      * @param callable $callable
      * @param string $configuration class name of the configuration class to use
+     * @param boolean $isReadOnly
      */
     public static function run(callable $callable,
-            $configuration = 'YetAnotherWebStack\PhpMemcachedSession\Service\Configuration'
+            $configuration = 'YetAnotherWebStack\PhpMemcachedSession\Service\Configuration',
+            $isReadOnly = false
     ) {
         Service\DependencyInjector::set(
                 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration',
                 $configuration, true);
 
         self::setSettings();
-        self::setClasses();
+        self::setClasses($isReadOnly);
         call_user_func($callable);
         session_set_save_handler(
                 Service\DependencyInjector::get(
@@ -28,11 +30,16 @@ class Initializer {
 
     /**
      * sets the class name lookup
+     * @param boolean $isReadOnly
      */
-    protected static function setClasses() {
+    protected static function setClasses($isReadOnly = false) {
         Service\DependencyInjector::set(
                 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository',
-                'YetAnotherWebStack\PhpMemcachedSession\Repository\MemCache');
+                ($isReadOnly ?
+                        'YetAnotherWebStack\PhpMemcachedSession\Repository\MemCacheRead' :
+                        'YetAnotherWebStack\PhpMemcachedSession\Repository\MemCacheReadWrite'
+                )
+        );
         Service\DependencyInjector::set(
                 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
                 'YetAnotherWebStack\PhpMemcachedSession\Model\Session', true);
