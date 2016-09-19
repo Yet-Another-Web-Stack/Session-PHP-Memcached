@@ -25,3 +25,5 @@ The required and proposed defaults can be set with the Configuration-Class.
 * sid_pepper: defaults to "this is not quite secret" and should be changed
 * memcache_user: no default, only use if the memcache is password protected
 * memcache_password: no default, only use if the memcache is password protected
+* serializer: a callable to serialize the session
+* unserializer: a callable to unserialize the session

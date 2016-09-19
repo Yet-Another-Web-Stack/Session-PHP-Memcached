@@ -98,6 +98,12 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
             $this->memcache->touch($this->getKey($params),
                     time() + $this->duration);
         }
+        $unserializer = \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                )->getSpecific('unserializer');
+        if ($unserializer && is_callable($unserializer)) {
+            $value = serialize(call_user_func($unserializer, $value));
+        }
         return $value;
     }
 
