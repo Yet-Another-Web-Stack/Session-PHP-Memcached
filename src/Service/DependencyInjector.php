@@ -18,11 +18,7 @@ class DependencyInjector {
         if (!self::$instance) {
             self::$instance = new \Auryn\Injector();
         }
-        $object = self::$instance->make($interface, $arguments);
-        if (key_exists($interface, self::$instance)) {
-            self::$instance->share($object);
-        }
-        return $object;
+        return self::$instance->make($interface, $arguments);
     }
 
     /**
