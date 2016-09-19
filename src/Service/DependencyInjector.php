@@ -22,20 +22,28 @@ class DependencyInjector {
     }
 
     /**
-     *
+     * sets a class to be newly instanciated when required
      * @param string $interface
      * @param string $implementation
-     * @param boolean $makeSingleton
      */
-    public static function set($interface, $implementation,
-            $makeSingleton = false) {
+    public static function setRegular($interface, $implementation) {
         if (!self::$instance) {
             self::$instance = new \Auryn\Injector();
         }
         self::$instance->alias($interface, $implementation);
-        if ($makeSingleton) {
-            self::$instance->share($interface);
+    }
+
+    /**
+     * Sets a class to be treated as a singleton
+     * @param string $interface
+     * @param string $implementation
+     */
+    public static function setSingleton($interface, $implementation) {
+        if (!self::$instance) {
+            self::$instance = new \Auryn\Injector();
         }
+        self::$instance->alias($interface, $implementation);
+        self::$instance->share($interface);
     }
 
 }

@@ -33,20 +33,27 @@ class Initializer {
      * @param string $repository name of the repository class
      */
     protected static function setClasses($configuration, $repository) {
-        foreach ([
-    'Configuration' => $configuration,
-    'Repository' => $repository,
-    'Model' => 'YetAnotherWebStack\PhpMemcachedSession\Model\Session',
-    'Controller' => 'YetAnotherWebStack\PhpMemcachedSession\Controller\Session',
-        ] as $interface => $implementation) {
-            Service\DependencyInjector::set(
-                    'YetAnotherWebStack\PhpMemcachedSession\Interfaces\\' . $interface,
-                    $implementation, true);
+        $mappings = [
+            'Singleton' => [
+                'Configuration' => $configuration,
+                'Model' => 'YetAnotherWebStack\PhpMemcachedSession\Model\Session',
+            ],
+            'Regular' => [
+                'Repository' => $repository,
+                'Controller' => 'YetAnotherWebStack\PhpMemcachedSession\Controller\Session',
+            ]
+        ];
+        foreach ($mappings as $type => $list) {
+            foreach ($list as $interface => $implementation) {
+                Service\DependencyInjector::{'set' . $type}(
+                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\\' . $interface,
+                        $implementation);
+            }
         }
     }
 
     /**
-     * sets the generally expected settings for the session. files
+     * sets the generally expected settings for the session.
      */
     protected static function setSettings() {
         $configuration = Service\DependencyInjector::get(
