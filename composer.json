@@ -25,6 +25,7 @@
     "require": {
         "php": ">=5.6.0",
         "ext-memcached": "*",
-        "rdlowrey/auryn": "*"
+        "rdlowrey/auryn": "*",
+        "psr/log": "*"
     }
 }

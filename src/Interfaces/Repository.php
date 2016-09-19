@@ -17,7 +17,7 @@ interface Repository {
      * @param string $value
      * @return boolean
      */
-    public function setByKey(array $params, $value);
+    public function setByKey(array $params, string $value);
 
     /**
      *

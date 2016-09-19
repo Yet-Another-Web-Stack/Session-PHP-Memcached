@@ -24,9 +24,8 @@ class MemCacheReadWrite extends MemCacheRead {
      * @return boolean
      */
     public function setByKey(array $params, $value) {
-        $serializer = \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getSpecific('serializer');
+        $this->logger->debug("setting $value at " . implode('.', $params));
+        $serializer = $this->configuration->getSpecific('serializer');
         $status = $this->memcache->set($this->getKey($params),
                 $serializer ?
                         call_user_func($serializer, unserialize($value)) : $value,
@@ -41,6 +40,7 @@ class MemCacheReadWrite extends MemCacheRead {
      * @return boolean
      */
     public function removeByKey(array $params) {
+        $this->logger->debug("deleting " . implode('.', $params));
         $this->memcache->delete($this->getKey($params) . '.locked');
         return $this->memcache->delete($this->getKey($params));
     }

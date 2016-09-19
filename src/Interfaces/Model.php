@@ -9,7 +9,8 @@ interface Model {
      * @param string $sessionId
      * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
-    public function __construct($sessionId, $repository);
+    public function __construct(string $sessionId,
+            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository);
 
     /**
      *
@@ -22,17 +23,10 @@ interface Model {
      * @param string $data
      * @return boolean was it saved?
      */
-    public function save($data);
+    public function save(string $data);
 
     /**
      * deletes the current data and instance
      */
     public function delete();
-
-    /**
-     *
-     * @param string $sessionId
-     * @return \YetAnotherWebStack\PhpMemcachedSession\Model\Session
-     */
-    public static function get($sessionId);
 }

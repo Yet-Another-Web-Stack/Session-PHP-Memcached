@@ -9,26 +9,28 @@ interface Configuration {
      * @param string $key
      * @return mixed
      */
-    public function getGeneral($key);
+    public function getGeneral(string $key);
 
     /**
      *
      * @param string $key
      * @return mixed
      */
-    public function getSpecific($key);
+    public function getSpecific(string $key);
 
     /**
      *
      * @param string $key
+     * @param mixed $value
      * @return mixed
      */
-    public function setGeneral($key, $value);
+    public function setGeneral(string $key, $value);
 
     /**
      *
      * @param string $key
+     * @param mixed $value
      * @return mixed
      */
-    public function setSpecific($key, $value);
+    public function setSpecific(string $key, $value);
 }

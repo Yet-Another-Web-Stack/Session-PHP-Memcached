@@ -23,16 +23,30 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
     protected $memcache;
 
     /**
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     *
+     * @var \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration
+     */
+    protected $configuration;
+
+    /**
      * parma \Memcached $memcache
      */
-    public function __construct(\Memcached $memcache) {
+    public function __construct(\Memcached $memcache,
+            \Psr\Log\LoggerInterface $logger,
+            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration) {
         $this->memcache = $memcache;
+        $this->logger = $logger;
+        $this->configuration = $configuration;
         $this->memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
         $this->setMemcacheLogin();
         $this->initializeServer();
-        $this->duration = DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getGeneral("gc_maxlifetime");
+        $this->duration = $configuration->getGeneral("gc_maxlifetime");
         if (!$this->duration) {
             $this->duration = 3600;
         }
@@ -43,19 +57,10 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      * add login data if provided
      */
     protected function setMemcacheLogin() {
-        if (\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getSpecific('memcache_user') &&
-                \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getSpecific('memcache_password')) {
+        if ($this->configuration->getSpecific('memcache_user') && $this->configuration->getSpecific('memcache_password')) {
             $this->memcache->setSaslAuthData(
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                    )->getSpecific('memcache_user'),
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                    )->getSpecific('memcache_password')
+                    $this->configuration->getSpecific('memcache_user'),
+                    $this->configuration->getSpecific('memcache_password')
             );
         }
     }
@@ -66,12 +71,8 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
     protected function initializeServer() {
         if (count($this->memcache->getServerList()) == 0) {
             $this->memcache->addServer(
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                    )->getSpecific('memcache_server'),
-                    \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                            'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                    )->getSpecific('memcache_port')
+                    $this->configuration->getSpecific('memcache_server'),
+                    $this->configuration->getSpecific('memcache_port')
             );
         }
     }
@@ -98,10 +99,10 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
             $this->memcache->touch($this->getKey($params),
                     time() + $this->duration);
         }
-        $unserializer = \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
-                )->getSpecific('unserializer');
+        $unserializer = $this->configuration->getSpecific('unserializer');
         if ($unserializer && is_callable($unserializer)) {
+            $this->logger->debug("re-serializing value of " . implode('.',
+                            $params));
             $value = serialize(call_user_func($unserializer, $value));
         }
         return $value;
@@ -114,6 +115,8 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      * @return boolean
      */
     public function setByKey(array $params, $value) {
+        $this->logger->debug("will not set value $value at " . implode('.',
+                        $params));
         return false;
     }
 
@@ -123,6 +126,7 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      * @return boolean
      */
     public function removeByKey(array $params) {
+        $this->logger->debug("will not delete " . implode('.', $params));
         return false;
     }
 
