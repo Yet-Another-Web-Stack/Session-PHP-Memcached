@@ -2,7 +2,13 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Controller;
 
-class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller {
+class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller {
+
+    /**
+     *
+     * @var string
+     */
+    protected static $model = 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model';
 
     /**
      *
@@ -55,8 +61,7 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Contr
     public function destroy($session_id) {
         $this->logger->debug("Destroying session");
         return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
-                        [':sessionId' => $session_id])->delete();
+                        self::$model, [':sessionId' => $session_id])->delete();
     }
 
     /**
@@ -88,8 +93,7 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Contr
     public function read($session_id) {
         $this->logger->debug("Trying read session $session_id");
         return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
-                        ['sessionId' => $session_id])->load();
+                        self::$model, [':sessionId' => $session_id])->load();
     }
 
     /**
@@ -101,8 +105,7 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Contr
     public function write($session_id, $session_data) {
         $this->logger->debug("Trying write to the session $session_id");
         return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model',
-                        ['sessionId' => $session_id])->save($session_data);
+                        self::$model, [':sessionId' => $session_id])->save($session_data);
     }
 
 }

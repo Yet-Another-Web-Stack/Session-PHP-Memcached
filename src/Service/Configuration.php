@@ -2,7 +2,7 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Service;
 
-class Configuration {
+class Configuration implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration {
 
     /**
      *
@@ -36,7 +36,7 @@ class Configuration {
      */
     public function getSpecific($key) {
         $value = ini_get(self::$iniPrefix . '.' . $key);
-        if ($value === null && !isset(self::$defaults[$key])) {
+        if (!$value && !isset(self::$defaults[$key])) {
             return null;
         }
         return self::$defaults[$key];

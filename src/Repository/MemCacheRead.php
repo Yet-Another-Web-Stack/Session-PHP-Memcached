@@ -57,7 +57,8 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      * add login data if provided
      */
     protected function setMemcacheLogin() {
-        if ($this->configuration->getSpecific('memcache_user') && $this->configuration->getSpecific('memcache_password')) {
+        if ($this->configuration->getSpecific('memcache_user') &&
+                $this->configuration->getSpecific('memcache_password')) {
             $this->memcache->setSaslAuthData(
                     $this->configuration->getSpecific('memcache_user'),
                     $this->configuration->getSpecific('memcache_password')

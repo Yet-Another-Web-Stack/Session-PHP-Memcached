@@ -9,8 +9,9 @@ interface Model {
      * @param string $sessionId
      * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
-    public function __construct(string $sessionId,
-            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository);
+    public function __construct($sessionId,
+            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
+            \Psr\Log\LoggerInterface $logger);
 
     /**
      *
@@ -23,7 +24,7 @@ interface Model {
      * @param string $data
      * @return boolean was it saved?
      */
-    public function save(string $data);
+    public function save($data);
 
     /**
      * deletes the current data and instance

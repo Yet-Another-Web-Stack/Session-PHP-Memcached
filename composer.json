@@ -1,5 +1,5 @@
 {
-    "name": "idrinth/php-memcached-session",
+    "name": "Yet-Another-Web-Stack/php-memcached-session",
     "description": "Provides a sessionhandler for php and memcached",
     "license": "MIT",
     "type": "library",

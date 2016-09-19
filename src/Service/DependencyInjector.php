@@ -14,7 +14,7 @@ class DependencyInjector {
      * param string $interface
      * @return \stdClass
      */
-    public static function get($interface, $arguments) {
+    public static function get($interface, $arguments = array()) {
         if (!self::$instance) {
             self::$instance = new \Auryn\Injector();
         }

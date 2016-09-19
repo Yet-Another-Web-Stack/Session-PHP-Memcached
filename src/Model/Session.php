@@ -2,7 +2,7 @@
 
 namespace YetAnotherWebStack\PhpMemcachedSession\Model;
 
-class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model {
+class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model {
 
     /**
      *
@@ -42,10 +42,16 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model
 
     /**
      *
+     * @var boolean
+     */
+    protected $wasStored = false;
+
+    /**
+     *
      * @param string $sessionId
      * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
-    protected function __construct($sessionId,
+    public function __construct($sessionId,
             \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
             \Psr\Log\LoggerInterface $logger) {
         $this->logger = $logger;
@@ -67,7 +73,7 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model
     /**
      * stores the sessionId
      */
-    protected function __destruct() {
+    public function __destruct() {
         $this->save(serialize($_SESSION));
         $this->logger->debug("Saved session");
     }
@@ -77,7 +83,7 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model
      * @return string a serialized string
      */
     public function load() {
-        $this->original = $this->getByKey($this->getKeys()) . '';
+        $this->original = $this->repository->getByKey($this->getKeys()) . '';
         $this->logger->debug("Loading session");
         return $this->original;
     }
@@ -88,12 +94,17 @@ class Session implements YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model
      * @return boolean was it saved?
      */
     public function save($data) {
+        if ($this->wasStored) {
+            $this->logger->debug("Already saved, nothing to store");
+            return;
+        }
+        $this->wasStored;
         if ($data === $this->original) {
             $this->logger->debug("Session unchanged, nothing to store");
             return true; //nothing to change
         }
         $this->logger->debug("Session changed, storing");
-        return $this->repository->updateByKey($this->getKeys(), $data);
+        return $this->repository->setByKey($this->getKeys(), $data);
     }
 
     /**
