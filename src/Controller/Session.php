@@ -1,14 +1,14 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Controller;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Controller;
 
-class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller {
+class Session implements \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller {
 
     /**
      *
      * @var string
      */
-    protected static $model = 'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model';
+    protected static $model = 'Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model';
 
     /**
      *
@@ -18,17 +18,17 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Cont
 
     /**
      *
-     * @var \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration
+     * @var \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration
      */
     protected $configuration;
 
     /**
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration
+     * @param \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration
      */
     public function __construct(\Psr\Log\LoggerInterface $logger,
-            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration) {
+            \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration) {
         $this->logger = $logger;
         $this->configuration = $configuration;
     }
@@ -60,7 +60,7 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Cont
      */
     public function destroy($session_id) {
         $this->logger->debug("Destroying session");
-        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+        return \Org\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
                         self::$model, [':sessionId' => $session_id])->delete();
     }
 
@@ -92,7 +92,7 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Cont
      */
     public function read($session_id) {
         $this->logger->debug("Trying read session $session_id");
-        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+        return \Org\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
                         self::$model, [':sessionId' => $session_id])->load();
     }
 
@@ -104,7 +104,7 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Cont
      */
     public function write($session_id, $session_data) {
         $this->logger->debug("Trying write to the session $session_id");
-        return \YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
+        return \Org\YetAnotherWebStack\PhpMemcachedSession\Service\DependencyInjector::get(
                         self::$model, [':sessionId' => $session_id])->save($session_data);
     }
 

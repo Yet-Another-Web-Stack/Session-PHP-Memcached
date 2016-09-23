@@ -1,16 +1,16 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Interfaces;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces;
 
 interface Model {
 
     /**
      *
      * @param string $sessionId
-     * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
+     * @param \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
     public function __construct($sessionId,
-            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
+            \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
             \Psr\Log\LoggerInterface $logger);
 
     /**

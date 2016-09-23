@@ -1,6 +1,6 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Interfaces;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces;
 
 interface Configuration {
 

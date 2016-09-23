@@ -1,6 +1,6 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Service;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Service;
 
 class DependencyInjector {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Service;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Service;
 
-class Configuration implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration {
+class Configuration implements \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration {
 
     /**
      *

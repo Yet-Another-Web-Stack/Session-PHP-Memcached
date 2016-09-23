@@ -1,6 +1,6 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Repository;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Repository;
 
 class MemCacheReadWrite extends MemCacheRead {
 

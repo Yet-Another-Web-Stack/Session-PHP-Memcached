@@ -1,8 +1,8 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Model;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Model;
 
-class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model {
+class Session implements \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Model {
 
     /**
      *
@@ -12,7 +12,7 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Mode
 
     /**
      *
-     * @var \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository
+     * @var \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository
      */
     protected $repository;
 
@@ -49,10 +49,10 @@ class Session implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Mode
     /**
      *
      * @param string $sessionId
-     * @param \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
+     * @param \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository
      */
     public function __construct($sessionId,
-            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
+            \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository $repository,
             \Psr\Log\LoggerInterface $logger) {
         $this->logger = $logger;
         $this->sessionId = $sessionId;

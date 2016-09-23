@@ -1,8 +1,8 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession\Repository;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession\Repository;
 
-class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository {
+class MemCacheRead implements \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Repository {
 
     /**
      *
@@ -14,7 +14,7 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      *
      * @var string[]
      */
-    protected $prefix = ['yet-another-web-stack', 'memcached-session'];
+    protected $prefix = ['org', 'yet-another-web-stack', 'memcached-session'];
 
     /**
      *
@@ -30,7 +30,7 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
 
     /**
      *
-     * @var \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration
+     * @var \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration
      */
     protected $configuration;
 
@@ -39,7 +39,7 @@ class MemCacheRead implements \YetAnotherWebStack\PhpMemcachedSession\Interfaces
      */
     public function __construct(\Memcached $memcache,
             \Psr\Log\LoggerInterface $logger,
-            \YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration) {
+            \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration $configuration) {
         $this->memcache = $memcache;
         $this->logger = $logger;
         $this->configuration = $configuration;

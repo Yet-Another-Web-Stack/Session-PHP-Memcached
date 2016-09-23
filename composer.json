@@ -1,5 +1,5 @@
 {
-    "name": "Yet-Another-Web-Stack/php-memcached-session",
+    "name": "org/Yet-Another-Web-Stack/php-memcached-session",
     "description": "Provides a sessionhandler for php and memcached",
     "license": "MIT",
     "type": "library",
@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "YetAnotherWebStack\\PhpMemcachedSession\\": "src/"
+            "Org\\YetAnotherWebStack\\PhpMemcachedSession\\": "src/"
         }
     },
     "support": {

@@ -1,6 +1,6 @@
 <?php
 
-namespace YetAnotherWebStack\PhpMemcachedSession;
+namespace Org\YetAnotherWebStack\PhpMemcachedSession;
 
 class Initializer {
 
@@ -11,18 +11,18 @@ class Initializer {
      * @param boolean $isReadOnly
      */
     public static function run(callable $callable,
-            $configuration = 'YetAnotherWebStack\PhpMemcachedSession\Service\Configuration',
+            $configuration = 'Org\YetAnotherWebStack\PhpMemcachedSession\Service\Configuration',
             $isReadOnly = false
     ) {
         self::setClasses($configuration,
-                'YetAnotherWebStack\PhpMemcachedSession\Repository\MemCacheRead' . (
+                'Org\YetAnotherWebStack\PhpMemcachedSession\Repository\MemCacheRead' . (
                 $isReadOnly ? '' : 'Write'
         ));
         self::setSettings();
         call_user_func($callable);
         session_set_save_handler(
                 Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller'
+                        'Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Controller'
                 )
         );
     }
@@ -36,17 +36,17 @@ class Initializer {
         $mappings = [
             'Singleton' => [
                 'Configuration' => $configuration,
-                'Model' => 'YetAnotherWebStack\PhpMemcachedSession\Model\Session',
+                'Model' => 'Org\YetAnotherWebStack\PhpMemcachedSession\Model\Session',
             ],
             'Regular' => [
                 'Repository' => $repository,
-                'Controller' => 'YetAnotherWebStack\PhpMemcachedSession\Controller\Session',
+                'Controller' => 'Org\YetAnotherWebStack\PhpMemcachedSession\Controller\Session',
             ]
         ];
         foreach ($mappings as $type => $list) {
             foreach ($list as $interface => $implementation) {
                 Service\DependencyInjector::{'set' . $type}(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\\' . $interface,
+                        'Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\\' . $interface,
                         $implementation);
             }
         }
@@ -57,7 +57,7 @@ class Initializer {
      */
     protected static function setSettings() {
         $configuration = Service\DependencyInjector::get(
-                        'YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
+                        'Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\Configuration'
         );
         $configuration->setGeneral('serialize_handler', 'php_serialize');
         $configuration->setGeneral('name', 'name');
