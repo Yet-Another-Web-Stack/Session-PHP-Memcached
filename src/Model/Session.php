@@ -98,7 +98,7 @@ class Session implements \Org\YetAnotherWebStack\PhpMemcachedSession\Interfaces\
             $this->logger->debug("Already saved, nothing to store");
             return;
         }
-        $this->wasStored;
+        $this->wasStored = true;
         if ($data === $this->original) {
             $this->logger->debug("Session unchanged, nothing to store");
             return true; //nothing to change
